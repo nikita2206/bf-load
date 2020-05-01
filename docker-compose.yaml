@@ -1,0 +1,44 @@
+version: "3.8"
+services:
+
+  m1:
+    image: mysql:5
+    ports:
+      - 3362:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=client
+      - MYSQL_PASSWORD=client
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    tmpfs:
+      - /var/lib/mysql
+
+  m2:
+    image: mysql:5
+    ports:
+      - 3361:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=client
+      - MYSQL_PASSWORD=client
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    tmpfs:
+      - /var/lib/mysql
+
+  proxysql:
+    image: proxysql/proxysql:2.0.9
+    ports:
+      - 6033:6033
+      - 6032:6032
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    volumes:
+      - ./proxysql.cnf:/etc/proxysql.cnf

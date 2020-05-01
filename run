@@ -1,0 +1,4 @@
+#!/usr/sbin/env php
+<?php
+
+require __DIR__ . "/src/entrypoint.php";

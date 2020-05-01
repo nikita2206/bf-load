@@ -1,12 +1,19 @@
 {
     "name": "nikita/bf-load",
     "require": {
-        "guzzlehttp/guzzle": "^6.5"
+        "guzzlehttp/guzzle": "^6.5",
+        "symfony/console": "^5",
+        "symfony/yaml": "^5"
     },
     "authors": [
         {
             "name": "Nikita Nefedov",
             "email": "inefedor@gmail.com"
         }
-    ]
+    ],
+    "autoload": {
+        "psr-4": {
+            "test\\": "src"
+        }
+    }
 }
