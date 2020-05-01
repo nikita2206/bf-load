@@ -35,7 +35,7 @@ class SwitchoverDbUsingProxySql extends Command
         $this->addOption("m2-proxysql", null, InputOption::VALUE_REQUIRED, "M2 connection string as seen from ProxySQL, defaults to the value of --m2");
 
         $this->addOption("config", "c", InputOption::VALUE_OPTIONAL,
-            "Optional YAML file with passwords, keys are m1, m2 and proxysql with values being passwords for corresponding users");
+            "Optional YAML file with passwords, keys are m1-password, m2-password and proxysql-password with values being passwords for corresponding users");
 
         $this->setDescription(<<<DESC
 Switch over from M1 DB to M2 using ProxySQL
