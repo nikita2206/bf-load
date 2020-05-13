@@ -157,10 +157,10 @@ DESC
         $m1FromProxySql = $input->getOption("m1-proxysql") ? $this->parseConnectionString($input->getOption("m1-proxysql")) : $this->parseConnectionString($input->getOption("m1"));
         $m2FromProxySql = $input->getOption("m2-proxysql") ? $this->parseConnectionString($input->getOption("m2-proxysql")) : $this->parseConnectionString($input->getOption("m2"));
 
-        $stmt = $prx->prepare("SELECT * FROM mysql_servers WHERE hostname = ? AND port = ? AND status='ONLINE'");
+        $stmt = $prx->prepare("SELECT * FROM runtime_mysql_servers WHERE hostname = ? AND port = ? AND status='ONLINE'");
         $stmt->bindValue(1, $m1FromProxySql["host"]);
         $stmt->bindValue(2, $m1FromProxySql["port"]);
-        assert($stmt->execute());
+        $stmt->execute();
         $m1Servers = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         if (count($m1Servers) > 1) {
@@ -175,7 +175,6 @@ DESC
         $stmt = $prx->prepare("SELECT * FROM mysql_servers WHERE hostname = ? AND port = ? AND status='OFFLINE_SOFT'");
         $stmt->bindValue(1, $m2FromProxySql["host"]);
         $stmt->bindValue(2, $m2FromProxySql["port"]);
-        assert($stmt->execute());
         $m2Servers = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         if (count($m2Servers) > 1) {
@@ -192,7 +191,6 @@ DESC
         $stmt->bindValue(2, $m1FromProxySql["port"]);
         $stmt->bindValue(3, $m2FromProxySql["host"]);
         $stmt->bindValue(4, $m2FromProxySql["port"]);
-        assert($stmt->execute());
         $otherServers = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if ($otherServers) {
             $otherServersStr = implode(", ", array_map(function ($s) { return "{$s["hostname"]}:{$s["port"]}"; }, $otherServers));
@@ -205,7 +203,7 @@ DESC
             }
         }
 
-        $rules = $prx->query("SELECT * FROM mysql_query_rules")->fetchAll(\PDO::FETCH_ASSOC);
+        $rules = $prx->query("SELECT * FROM mysql_query_rules WHERE active=1")->fetchAll(\PDO::FETCH_ASSOC);
         if ($rules) {
             $ask = new QuestionHelper();
             $answer = $ask->ask($input, $output, new Question("<info>There are active mysql_query_rules, it's best " .
